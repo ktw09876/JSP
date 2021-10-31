@@ -1,20 +1,8 @@
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.Statement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
+<%@page import="com.newlecture.web.entity.Notice"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<%
-	String url = "jdbc:oracle:thin:@121.148.39.251:1521/xepdb1";
-	String sql = "SELECT * FROM NOTICE";
-	
-	Class.forName("oracle.jdbc.driver.OracleDriver");
-	Connection con = DriverManager.getConnection(url, "test1", "1111");
-	Statement st = con.createStatement();
-	ResultSet rs = st.executeQuery(sql);
-	
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> <!-- uri대신 c를 사용하겠다 186행 -->
     
 <!DOCTYPE html>
 <html>
@@ -189,19 +177,25 @@
 					</thead>
 					<tbody>
 					
-					<%while(rs.next()) {%>
-							
+					<%-- <% 
+					List<Notice> list = (List<Notice>)request.getAttribute("list");
+					for(Notice n : list){
+						pageContext.setAttribute("n", n);
+					%> --%>
+					<!-- 같은 역할을 forEach가  대신 해준다 taglib필요-->
+					<c:forEach var="n" items="${list }" > <!-- 'n'이라는 키워드로 pageContext저장소에 담아주는 역할, 
+																						저장소에 담겨있는 데이터를 items에 담는다,
+																						begin="1" end="3": 인덱스번호 1번부터 3번까지 -->
 					<tr>
-						<td><%=rs.getInt("ID")%></td>
-						<td class="title indent text-align-left"><a href="detail?id=<%=rs.getInt("ID")%>"><%=rs.getString("TITLE") %></a></td>
-						<td><%=rs.getString("WRITER_ID") %></td>
-						<td>
-							<%=rs.getDate("REGDATE") %>	
-						</td>
-						<td><%=rs.getInt("HIT") %></td>
+						<td>${n.id }</td>
+						<td class="title indent text-align-left"><a href="detail?id=${n.id }">${n.title }</a></td>
+						<td>${n.writerId }</td>
+						<td>${n.regdate }</td>
+						<td>${n.hit }</td>
 					</tr>
+					</c:forEach>
+					<%-- <%} %> --%>
 					
-					<%} %>
 					
 					</tbody>
 				</table>
@@ -215,20 +209,31 @@
 			<div class="margin-top align-center pager">	
 		
 	<div>
+		<c:set var="page" value="${(param.p == null)?1:param.p }" />
+		<c:set var="startNum" value="${page-(page-1)%5 }" /> <!-- value에 있는 계산식이 연산되서 var에 있는 변수에 담김 -->
+		<c:set var="lastNum" value="23" /> 
 		
-		
-		<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
-		
+		<c:if test="${startNum > 1 }">
+			<a class="btn btn-prev" href="?p=${startNum-1 }&t=&q=" >이전</a>
+		</c:if>
+		<c:if test="${startNum <= 1 }">
+			<span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
+		</c:if>
 	</div>
+	
+	
 	<ul class="-list- center">
-		<li><a class="-text- orange bold" href="?p=1&t=&q=" >1</a></li>
-				
+		<c:forEach var="i" begin="0" end="4">
+			<li><a class="-text- orange bold" href="?p=${startNum+i }&t=&q=" >${startNum+i }</a></li>
+		</c:forEach>
 	</ul>
 	<div>
-		
-		
+		<c:if test="${startNum+5 < lastNum }">
+			<a href="?p=${startNum+5 }&t=&q=" class="btn btn-next" >다음</a>
+		</c:if>
+		<c:if test="${startNum+5 >= lastNum }">
 			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
-		
+		</c:if>
 	</div>
 	
 			</div>
@@ -276,10 +281,6 @@
     
     </html>
     
-    <%
-	    rs.close();
-		st.close();
-		con.close();
-    %>
+    
     
     

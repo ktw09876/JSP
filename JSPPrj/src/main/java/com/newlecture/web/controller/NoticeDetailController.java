@@ -22,14 +22,14 @@ public class NoticeDetailController extends HttpServlet{
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int id = Integer.parseInt(request.getParameter("id"));
 
-		String url = "jdbc:oracle:thin:@121.148.39.128:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@59.3.42.74:1521/xepdb1";
 		String sql = "SELECT * FROM NOTICE WHERE ID=?";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(url, "test1", "1111");
 			PreparedStatement st = con.prepareStatement(sql);
-			st.setInt(1, id); //15행 1번째 물음표에 값을 넣겠다
+			st.setInt(1, id);
 			
 			ResultSet rs = st.executeQuery();
 			
@@ -49,7 +49,7 @@ public class NoticeDetailController extends HttpServlet{
 											regdate,
 											hit,
 											files,
-											content					
+											content				
 										);
 			
 			request.setAttribute("n", notice);
@@ -78,7 +78,7 @@ public class NoticeDetailController extends HttpServlet{
 		
 		//forward(controller와 view를 연결)
 		request
-		.getRequestDispatcher("/notice/detail.jsp")
+		.getRequestDispatcher("/WEB-INF/view/notice/detail.jsp")
 		.forward(request, response);
 		
 	}
