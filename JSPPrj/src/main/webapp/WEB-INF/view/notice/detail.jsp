@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html>
 
@@ -154,19 +157,24 @@
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3">${n.regdate }</td>
+									<td class="text-align-left text-indent" colspan="3"><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${n.regdate }" /></td> <!-- 날짜형식 바꾸기 '월'은 '분'과 구분하기 위해 대문자로 한다. -->
 								</tr>
 								<tr>
 									<th>작성자</th>
 									<td>${n.writerId }</td>
 									<th>조회수</th>
-									<td>${n.hit }</td>
+									<td><fmt:formatNumber type="number" pattern="##,####원" value="${n.hit }" /></td> <!-- 숫자 패턴 바꾸기 -->
 								</tr>
 								<tr>
 									<th>첨부파일</th>
 									<td colspan="3" style="text-align:left; text-indent:10px;" >
 										<c:forTokens var="fileName" items="${n.files }" delims="," varStatus="st"> <!-- items를 delims를 이용해 끊어 읽겠다 -->
-											<a href="${fileName }">${fileName }</a> <!-- 파일 하나하나 하이퍼링크를 건다 -->
+											
+											<c:set var="style" value="" /> <!-- 기본 스타일 -->
+											<c:if test="${fn:endsWith(fileName, '.zip') }"> <!-- 조건검사=파일이름이 '.zip'으로 끝나면 -->
+												<c:set var="style" value="font-weight:bold; color:red;"/> <!-- 이 스타일을 적용하겠다 -->
+											</c:if>
+											<a href="${fileName }" style="${style}" >${fn:toUpperCase(fileName)}</a> <!-- 파일 하나하나 하이퍼링크를 건다, 출력되는 파일명을 대문자로 -->
 											<c:if test="${!st.last }"> <!-- 마지막 인자가 아니라면 168행 varStatus필요 -->
 												/ <!-- '/'를 붙이겠다 -->
 											</c:if>
