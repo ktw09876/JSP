@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -164,7 +164,14 @@
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3">${n.files }</td>
+									<td colspan="3" style="text-align:left; text-indent:10px;" >
+										<c:forTokens var="fileName" items="${n.files }" delims="," varStatus="st"> <!-- items를 delims를 이용해 끊어 읽겠다 -->
+											<a href="${fileName }">${fileName }</a> <!-- 파일 하나하나 하이퍼링크를 건다 -->
+											<c:if test="${!st.last }"> <!-- 마지막 인자가 아니라면 168행 varStatus필요 -->
+												/ <!-- '/'를 붙이겠다 -->
+											</c:if>
+										</c:forTokens>
+									</td>
 								</tr>
 								<tr class="content">
 									<td colspan="4">${n.content }</td>
@@ -174,7 +181,7 @@
 					</div>
 					
 					<div class="margin-top text-align-center">
-						<a class="btn btn-list" href="list.jsp">목록</a>
+						<a class="btn btn-list" href="list">목록</a>
 					</div>
 					
 					<div class="margin-top">
