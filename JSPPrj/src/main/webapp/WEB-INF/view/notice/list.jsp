@@ -153,11 +153,11 @@
 						<legend class="hidden">공지사항 검색 필드</legend>
 						<label class="hidden">검색분류</label>
 						<select name="f">
-							<option  value="title">제목</option>
-							<option  value="writerId">작성자</option>
+							<option ${(param.f == "title")?"selected":"" } value="title">제목</option>
+							<option ${(param.f == "writer_Id")?"selected":"" } value="writer_Id">작성자</option> <!-- 검색창 상태값 유지 -->
 						</select> 
 						<label class="hidden">검색어</label>
-						<input type="text" name="q" value=""/>
+						<input type="text" name="q" value="${param.q }"/> <!-- 쿼리스트링에 파라미터에 q가 있으면 출력해달라, 상태값 유지 -->
 						<input class="btn btn-search" type="submit" value="검색" />
 					</fieldset>
 				</form>
@@ -203,13 +203,13 @@
 			
 			<div class="indexer margin-top align-right">
 				<h3 class="hidden">현재 페이지</h3>
-				<div><span class="text-orange text-strong">1</span> / 1 pages</div>
+				<div><span class="text-orange text-strong">${(empty param.p) ? 1 : param.p }</span> / 1 pages</div> <!-- param.p가 비어있으면 1, 아니면 param.p를 채우겠다 -->
 			</div>
 
 			<div class="margin-top align-center pager">	
 		
 	<div>
-		<c:set var="page" value="${(param.p == null)?1:param.p }" />
+		<c:set var="page" value="${(empty param.p)?1:param.p }" /> <!-- param.p가 비어있으면 1, 아니면 param.p를 채우겠다 -->
 		<c:set var="startNum" value="${page-(page-1)%5 }" /> <!-- value에 있는 계산식이 연산되서 var에 있는 변수에 담김 -->
 		<c:set var="lastNum" value="23" /> 
 		
@@ -224,7 +224,7 @@
 	
 	<ul class="-list- center">
 		<c:forEach var="i" begin="0" end="4">
-			<li><a class="-text- orange bold" href="?p=${startNum+i }&t=&q=" >${startNum+i }</a></li>
+			<li><a class="-text-  ${(page == (startNum+i)) ? 'orange' : '' } bold" href="?p=${startNum+i }&f=${param.f }&q=${param.q}" >${startNum+i }</a></li> <!-- EL안에서는 홑따옴표를 사용해도 괜찮다. -->
 		</c:forEach>
 	</ul>
 	<div>

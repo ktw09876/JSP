@@ -23,9 +23,26 @@ import com.newlecture.web.service.NoticeService;
 public class NoticeListController extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		NoticeService service = new NoticeService();
-		List<Notice> list = service.getNoticeList();
+		//list?f=title&q=a
 		
+		String field_ = request.getParameter("f"); 
+		String query_ = request.getParameter("q"); //일단 사용자가 입력한 값을 임시변수에 담아두고
+		String page_ =  request.getParameter("p");
+		
+		String field = "title"; //기본값
+		if(field_ != null && !field_.equals("")) //사용자가 입력한 값이 null이 아니면
+			field = field_; //그 값을 field에 담아서 전달
+		
+		String query = ""; //기본값
+		if(query_ != null && !query_.equals("")) //사용자가 입력한 값이 null이 아니면
+			query = query_; //그 값을 query에 담아서 전달
+		
+		int page = 1; //기본값
+		if(page_ != null && !page_.equals("")) //사용자가 입력한 값이 null이 아니면
+			page = Integer.parseInt(page_); //그 값을 page에 담아서 전달
+		
+		NoticeService service = new NoticeService();
+		List<Notice> list = service.getNoticeList(field, query, page);
 		
 		
 		request.setAttribute("list", list);
