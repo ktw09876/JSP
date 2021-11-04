@@ -2,7 +2,9 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> <!-- uri대신 c를 사용하겠다 186행 -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> <!-- uri대신 c를 사용하겠다  -->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
     
 <!DOCTYPE html>
 <html>
@@ -188,7 +190,7 @@
 																						begin="1" end="3": 인덱스번호 1번부터 3번까지 -->
 					<tr>
 						<td>${n.id }</td>
-						<td class="title indent text-align-left"><a href="detail?id=${n.id }">${n.title }</a></td>
+						<td class="title indent text-align-left"><a href="detail?id=${n.id }">${n.title }</a><span>[${n.cmtCount }]</span></td>
 						<td>${n.writerId }</td>
 						<td>${n.regdate }</td>
 						<td>${n.hit }</td>
@@ -200,18 +202,18 @@
 					</tbody>
 				</table>
 			</div>
+			<c:set var="page" value="${(empty param.p)?1:param.p }" /> <!-- param.p가 비어있으면 1, 아니면 param.p를 채우겠다 -->
+			<c:set var="startNum" value="${page-(page-1)%5 }" /> <!-- value에 있는 계산식이 연산되서 var에 있는 변수에 담김 -->
+			<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(count/10), '.')}" /> <!-- 11.0에서 '.'이 발견되면 그 앞에것만 출력 -->
 			
 			<div class="indexer margin-top align-right">
 				<h3 class="hidden">현재 페이지</h3>
-				<div><span class="text-orange text-strong">${(empty param.p) ? 1 : param.p }</span> / 1 pages</div> <!-- param.p가 비어있으면 1, 아니면 param.p를 채우겠다 -->
+				<div><span class="text-orange text-strong">${(empty param.p) ? 1 : param.p }</span> / ${lastNum } pages</div> <!-- param.p가 비어있으면 1, 아니면 param.p를 채우겠다 -->
 			</div>
 
 			<div class="margin-top align-center pager">	
 		
 	<div>
-		<c:set var="page" value="${(empty param.p)?1:param.p }" /> <!-- param.p가 비어있으면 1, 아니면 param.p를 채우겠다 -->
-		<c:set var="startNum" value="${page-(page-1)%5 }" /> <!-- value에 있는 계산식이 연산되서 var에 있는 변수에 담김 -->
-		<c:set var="lastNum" value="23" /> 
 		
 		<c:if test="${startNum > 1 }">
 			<a class="btn btn-prev" href="?p=${startNum-1 }&t=&q=" >이전</a>
@@ -224,14 +226,16 @@
 	
 	<ul class="-list- center">
 		<c:forEach var="i" begin="0" end="4">
-			<li><a class="-text-  ${(page == (startNum+i)) ? 'orange' : '' } bold" href="?p=${startNum+i }&f=${param.f }&q=${param.q}" >${startNum+i }</a></li> <!-- EL안에서는 홑따옴표를 사용해도 괜찮다. -->
+			<c:if test="${(startNum+i) <= lastNum }">
+				<li><a class="-text-  ${(page == (startNum+i)) ? 'orange' : '' } bold" href="?p=${startNum+i }&f=${param.f }&q=${param.q}" >${startNum+i }</a></li> <!-- EL안에서는 홑따옴표를 사용해도 괜찮다. -->
+			</c:if>
 		</c:forEach>
 	</ul>
 	<div>
-		<c:if test="${startNum+5 < lastNum }">
+		<c:if test="${startNum+4 < lastNum }">
 			<a href="?p=${startNum+5 }&t=&q=" class="btn btn-next" >다음</a>
 		</c:if>
-		<c:if test="${startNum+5 >= lastNum }">
+		<c:if test="${startNum+4 >= lastNum }">
 			<span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
 		</c:if>
 	</div>

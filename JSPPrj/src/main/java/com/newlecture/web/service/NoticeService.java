@@ -11,24 +11,25 @@ import java.util.Date;
 import java.util.List;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.entity.NoticeView;
 
 public class NoticeService {
-	public List<Notice> getNoticeList() {
+	public List<NoticeView> getNoticeList() {
 		
 		return getNoticeList("title", "", 1);
 	}
-	public List<Notice> getNoticeList(int page) {
+	public List<NoticeView> getNoticeList(int page) {
 			
 			return getNoticeList("title", "", page);
 		}
 	
-	public List<Notice> getNoticeList(String field/* TITLE, WRITER_ID */, String query, int page) {
+	public List<NoticeView> getNoticeList(String field/* TITLE, WRITER_ID */, String query, int page) {
 		
-		List<Notice> list = new ArrayList<>();
+		List<NoticeView> list = new ArrayList<>();
 		
 		String sql = "SELECT * FROM("
 				+ "    SELECT ROWNUM NUM, N. *"
-				+ "    FROM (SELECT * FROM NOTICE WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) N"
+				+ "    FROM (SELECT * FROM NOTICE_VIEW WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) N"
 				+ ") "
 				+ "WHERE NUM BETWEEN ? AND ?";
 		
@@ -55,16 +56,18 @@ public class NoticeService {
 				Date regdate = rs.getDate("REGDATE");	
 				String hit = rs.getString("HIT");
 				String files = rs.getString("FILES");
-				String content = rs.getString("CONTENT");
+//				String content = rs.getString("CONTENT");
+				int cmtCount = rs.getInt("CMT_COUNT");
 				
-				Notice notice = new Notice(
+				NoticeView notice = new NoticeView(
 						id,
 						title,
 						writerId,
 						regdate,
 						hit,
 						files,
-						content				
+//						content
+						cmtCount
 					);
 				list.add(notice);
 			}	
@@ -108,7 +111,8 @@ public class NoticeService {
 			
 			ResultSet rs = st.executeQuery();
 			
-			count = rs.getInt("count"); //쿼리와 다르게 소문자로 받아도 괜찮다
+			if(rs.next()) //만약에 다음 것이 있으면
+				count = rs.getInt("count"); //쿼리와 다르게 소문자로 받아도 괜찮다
 
 		    rs.close();
 			st.close();
