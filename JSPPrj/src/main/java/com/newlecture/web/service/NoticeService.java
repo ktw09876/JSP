@@ -36,7 +36,7 @@ public class NoticeService {
 		//1, 11, 21, 31 ... -> 1+(page-1) *10
 		//10, 20, 30, 40 ... -> page * 10
 		
-		String url = "jdbc:oracle:thin:@59.3.42.74:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -100,7 +100,7 @@ public class NoticeService {
 				+ "    FROM (SELECT * FROM NOTICE WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) N"
 				+ ") ";
 		
-		String url = "jdbc:oracle:thin:@59.3.42.74:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -133,7 +133,7 @@ public class NoticeService {
 		
 		String sql = "SELECT * FROM NOTICE WHERE ID=?";
 		
-		String url = "jdbc:oracle:thin:@59.3.42.74:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -189,7 +189,7 @@ public class NoticeService {
 				+ "    AND ROWNUM = 1"
 				+ ") ";
 		
-		String url = "jdbc:oracle:thin:@59.3.42.74:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -242,7 +242,7 @@ public class NoticeService {
 				+ "    WHERE REGDATE < (SELECT REGDATE FROM NOTICE WHERE ID = ?)"
 				+ "    AND ROWNUM = 1";
 		
-		String url = "jdbc:oracle:thin:@59.3.42.74:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
