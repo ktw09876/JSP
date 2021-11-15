@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 
@@ -137,49 +140,81 @@
 
 
             <main>
-                <h2 class="main title">공지사항 등록</h2>
+                <h2 class="main title">공지사항</h2>
 
                 <div class="breadcrumb">
                     <h3 class="hidden">breadlet</h3>
                     <ul>
                         <li>home</li>
-                        <li>게시글 관리</li>
+                        <li>고객센터</li>
                         <li>공지사항</li>
                     </ul>
                 </div>
 
-                <form method="post" action="reg" enctype="multipart/form-data">
-                    <div class="margin-top first">
-                        <h3 class="hidden">공지사항 입력</h3>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <th>제목</th>
-                                    <td class="text-align-left text-indent text-strong text-orange" colspan="3">
-                                        <input type="text" name="title" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>첨부파일</th>
-                                    <td colspan="3" class="text-align-left text-indent"><input type="file"
-                                            name="file" /> </td>
-                                </tr>
-                                <tr class="content">
-                                    <td colspan="4"><textarea class="content" name="content"></textarea></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="text-align-right"><input class="vertical-align" type="checkbox" id="open" name="open" value="true"><label for="open" class="margin-left">바로공개</label> </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="margin-top text-align-center">
-                        <input class="btn-text btn-default" type="submit" value="등록" />
-                        <a class="btn-text btn-cancel" href="list.html">취소</a>
-                    </div>
-                </form>
+                <div class="margin-top first">
+                    <h3 class="hidden">공지사항 내용</h3>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>제목</th>
+                                <td class="text-align-left text-indent text-strong text-orange" colspan="3">${n.title }</td>
+                            </tr>
+                            <tr>
+                                <th>작성일</th>
+                                <td class="text-align-left text-indent" colspan="3"><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${n.regdate }" /></td>
+                            </tr>
+                            <tr>
+                                <th>작성자</th>
+                                <td>${n.writerId }</td>
+                                <th>조회수</th>
+                                <td>${n.hit }</td>
+                            </tr>
+                            <tr>
+                                <th>첨부파일</th>
+                                <td colspan="3">
+                                	<c:forTokens var="fileName" items="${n.files }" delims="," varStatus="st"> <!-- items를 delims를 이용해 끊어 읽겠다 -->
+										
+										<c:set var="style" value="" /> <!-- 기본 스타일 -->
+										<c:if test="${fn:endsWith(fileName, '.zip') }"> <!-- 조건검사=파일이름이 '.zip'으로 끝나면 -->
+											<c:set var="style" value="font-weight:bold; color:red;"/> <!-- 이 스타일을 적용하겠다 -->
+										</c:if>
+										<a href="${fileName }" style="${style}" >${fn:toUpperCase(fileName)}</a> <!-- 파일 하나하나 하이퍼링크를 건다, 출력되는 파일명을 대문자로 -->
+										<c:if test="${!st.last }"> <!-- 마지막 인자가 아니라면 varStatus필요 -->
+											/ <!-- '/'를 붙이겠다 -->
+										</c:if>
+									</c:forTokens>
+                                </td>
+                            </tr>
+                            <tr class="content">
+                                <td colspan="4">${n.content }</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
+                <div class="margin-top text-align-center">
+                    <a class="btn-text btn-cancel" href="list">목록</a>
+                    <a class="btn-text btn-default" href="edit">수정</a>
+                    <a class="btn-text btn-default" href="del">삭제</a>
+                </div>
+
+                <div class="margin-top">
+                    <table class="table border-top-default">
+                        <tbody>
+                            <tr>
+                                <th>다음글</th>
+                                <td colspan="3" class="text-align-left text-indent">다음글이 없습니다.</td>
+                            </tr>
+                            <tr>
+                                <th>이전글</th>
+                                <td colspan="3" class="text-align-left text-indent"><a class="text-blue text-strong"
+                                        href="">스프링 DI 예제 코드</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </main>
+
         </div>
     </div>
 
