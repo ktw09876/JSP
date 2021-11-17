@@ -26,9 +26,9 @@ public class NoticeService {
 		
 		int result = 0;
 		
-		String sql = "INSERT INTO NOTICE(TITLE, CONTENT, WRITER_ID, PUB) VALUES(?,?,?,?)";
+		String sql = "INSERT INTO NOTICE(TITLE, CONTENT, WRITER_ID, PUB, FILES) VALUES(?,?,?,?,?)";
 		
-		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@218.156.215.221:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -39,6 +39,7 @@ public class NoticeService {
 			st.setString(2, notice.getContent());
 			st.setString(3, notice.getWriterId());
 			st.setBoolean(4, notice.getPub());
+			st.setString(5, notice.getFiles());
 			
 			result = st.executeUpdate();
 			
@@ -90,7 +91,7 @@ public class NoticeService {
 		//1, 11, 21, 31 ... -> 1+(page-1) *10
 		//10, 20, 30, 40 ... -> page * 10
 		
-		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@218.156.215.221:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -156,7 +157,7 @@ public class NoticeService {
 				+ "    FROM (SELECT * FROM NOTICE WHERE "+field+" LIKE ? ORDER BY REGDATE DESC) N"
 				+ ") ";
 		
-		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@218.156.215.221:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -189,7 +190,7 @@ public class NoticeService {
 		
 		String sql = "SELECT * FROM NOTICE WHERE ID=?";
 		
-		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@218.156.215.221:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -247,7 +248,7 @@ public class NoticeService {
 				+ "    AND ROWNUM = 1"
 				+ ") ";
 		
-		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@218.156.215.221:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -302,7 +303,7 @@ public class NoticeService {
 				+ "    WHERE REGDATE < (SELECT REGDATE FROM NOTICE WHERE ID = ?)"
 				+ "    AND ROWNUM = 1";
 		
-		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@218.156.215.221:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -361,7 +362,7 @@ public class NoticeService {
 		
 		String sql = "DELETE NOTICE WHERE ID IN("+params+")";
 		
-		String url = "jdbc:oracle:thin:@220.71.113.220:1521/xepdb1";
+		String url = "jdbc:oracle:thin:@218.156.215.221:1521/xepdb1";
 		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");

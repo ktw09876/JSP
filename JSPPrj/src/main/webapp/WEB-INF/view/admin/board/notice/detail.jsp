@@ -178,7 +178,7 @@
 										<c:if test="${fn:endsWith(fileName, '.zip') }"> <!-- 조건검사=파일이름이 '.zip'으로 끝나면 -->
 											<c:set var="style" value="font-weight:bold; color:red;"/> <!-- 이 스타일을 적용하겠다 -->
 										</c:if>
-										<a href="${fileName }" style="${style}" >${fn:toUpperCase(fileName)}</a> <!-- 파일 하나하나 하이퍼링크를 건다, 출력되는 파일명을 대문자로 -->
+										<a download href="/upload/${fileName }" style="${style}" >${fn:toUpperCase(fileName)}</a> <!-- 파일 하나하나 하이퍼링크를 건다, 출력되는 파일명을 대문자로 -->
 										<c:if test="${!st.last }"> <!-- 마지막 인자가 아니라면 varStatus필요 -->
 											/ <!-- '/'를 붙이겠다 -->
 										</c:if>
